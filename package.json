@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 3005",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -12,11 +12,13 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.8.3",
+    "antd": "^4.21.7",
     "next": "12.2.2",
+    "query-string": "^7.1.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-redux": "^8.0.2",
-    "swapi-ts": "^1.0.1"
+    "ts-debounce": "^4.0.0"
   },
   "devDependencies": {
     "@types/node": "18.0.5",
