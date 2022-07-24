@@ -1,36 +1,37 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { IPeople } from 'types/swapi'
+import { IPeople, IPlanet } from 'types/swapi'
 
 export type DataState = {
-  people?: IPeople[]
-  count?: number
-  character?: IPeople
+  characters: { [id: string]: IPeople }
+  planets: { [id: string]: IPlanet }
 }
 
-const initialState: DataState = {}
+const initialState: DataState = {
+  characters: {},
+  planets: {},
+}
 
 export const slice = createSlice({
   name: 'data',
   initialState,
   reducers: {
-    updatePeople: (state: DataState, { payload: people }: PayloadAction<IPeople[]>) => {
-      state.people = people
+    updateCharacter: (
+      state: DataState,
+      { payload: { id, character } }: PayloadAction<{ id: string; character: IPeople }>,
+    ) => {
+      state.characters[id] = character
       return state
     },
-    updateCount: (state: DataState, { payload: count }: PayloadAction<number>) => {
-      state.count = count
-      return state
-    },
-    updateCharacter: (state: DataState, { payload: character }: PayloadAction<IPeople>) => {
-      state.character = character
+    updatePlanet: (state: DataState, { payload: { id, planet } }: PayloadAction<{ id: string; planet: IPlanet }>) => {
+      state.planets[id] = planet
       return state
     },
   },
 })
 
-export const { updatePeople, updateCount, updateCharacter } = slice.actions
+export const { updateCharacter, updatePlanet } = slice.actions
 
-export const selectPeople = ({ data: { people } }: { data: DataState }) => people
-export const selectCount = ({ data: { count } }: { data: DataState }) => count
+export const selectCharacters = ({ data: { characters } }: { data: DataState }) => characters
+export const selectPlanets = ({ data: { planets } }: { data: DataState }) => planets
 
 export const dataReducer = slice.reducer

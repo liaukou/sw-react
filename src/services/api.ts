@@ -1,5 +1,5 @@
 import queryString from 'query-string'
-import { IPeople, IPeoplePage } from 'types/swapi'
+import { IPeople, IPeoplePage, IPlanet } from 'types/swapi'
 
 async function request(url: string) {
   const headers = {
@@ -25,4 +25,8 @@ export function getPeople(page: number = 1, search?: string): Promise<IPeoplePag
 
 export function getCharacter(id: string): Promise<IPeople> {
   return request(`${swapiBaseUrl}people/${id}`)
+}
+
+export function getPlanet(id: string): Promise<IPlanet> {
+  return request(`${swapiBaseUrl}planets/${id}`)
 }

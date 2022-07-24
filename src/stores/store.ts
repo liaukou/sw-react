@@ -6,3 +6,5 @@ export const store = configureStore({
     data: dataReducer,
   },
 })
+
+export type RootState = ReturnType<typeof store.getState>

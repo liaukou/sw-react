@@ -1,15 +1,14 @@
 import { ChangeEvent, useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import { useRouter } from 'next/router'
 import { debounce } from 'ts-debounce'
 import { Layout, Row, Col, Input, Pagination, Typography } from 'antd'
 import { UserOutlined } from '@ant-design/icons'
 import { getPeople } from 'services/api'
-import { selectPeople, selectCount, updatePeople, updateCount } from 'stores/dataSlice'
 import { MemoizedCharacterCard } from 'components/characterCard/CharacterCard'
 import { LoadingIndicator } from 'components/loadingIndicator/LoadingIndicator'
-import 'antd/dist/antd.css'
 import classes from './Main.module.scss'
+import { IPeople } from 'types/swapi'
+import { getIfFromUrl } from 'services/utils'
 
 const { Header, Footer, Content } = Layout
 const { Title } = Typography
@@ -17,24 +16,21 @@ const { Title } = Typography
 const pageSize = 10
 
 export function Main() {
-  const dispatch = useDispatch()
   const router = useRouter()
-
-  // No much sens to store this data in Redux, done cause required in task
-  // Can be stored in component state or in react context
-  const people = useSelector(selectPeople)
-  const count = useSelector(selectCount)
 
   const [page, setPage] = useState<number>(1)
   const [searchQuery, setSearchQuery] = useState<string>('')
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
+  const [people, setPeople] = useState<IPeople[] | undefined>()
+  const [count, setCount] = useState<number>(0)
+
   useEffect(() => {
     setIsLoading(true)
     getPeople(page, searchQuery || undefined).then((data) => {
       setIsLoading(false)
-      dispatch(updatePeople(data.results))
-      dispatch(updateCount(data.count))
+      setPeople(data.results)
+      setCount(data.count)
     })
 
     // below triggers not deps
@@ -54,8 +50,7 @@ export function Main() {
   }, 300)
 
   const onCharacterClick = (url: string) => {
-    const parsedUrl = url.split('/').filter(Boolean)
-    const id = parsedUrl[parsedUrl.length - 1]
+    const id = getIfFromUrl(url)
 
     if (id) {
       router.push(`/${id}`)
